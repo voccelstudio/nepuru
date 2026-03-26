@@ -289,7 +289,15 @@ a{text-decoration:none;color:inherit;}
 .theme-preview-bar{border-radius:2px;height:7px;}
 .theme-label{padding:.3rem .4rem;font-size:.68rem;font-weight:600;text-align:center;border-top:1px solid var(--border);}
 
-::-webkit-scrollbar{width:6px;height:6px;}
+.topbar-search{padding:.45rem .875rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-body);color:var(--text-primary);font-size:.8rem;font-family:inherit;outline:none;width:200px;transition:border-color .15s;}
+.topbar-search:focus{border-color:var(--primary);}
+.prog-bar{height:6px;background:var(--border);border-radius:10px;overflow:hidden;margin-top:6px;}
+.prog-fill{height:100%;border-radius:10px;transition:width .4s ease;}
+.estado-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.chip-btn{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);transition:all .15s;white-space:nowrap;}
+.chip-btn:hover{background:var(--bg-hover);color:var(--text-primary);}
+.chip-btn.on{background:var(--primary);color:white;border-color:var(--primary);}
+
 ::-webkit-scrollbar-track{background:var(--bg-body);}
 ::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:4px;}
 @keyframes slideIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
@@ -354,12 +362,13 @@ a{text-decoration:none;color:inherit;}
       </div>
       <div class="logo-sub">ecosistema · v1.0</div>
       <div class="nav-section-title">Principal</div>
-      <div class="nav-item active"><span class="nav-icon">📊</span>Dashboard</div>
-      <div class="nav-item"><span class="nav-icon">📈</span>Analítica</div>
-      <div class="nav-item"><span class="nav-icon">🔔</span>Alertas<span class="nav-badge">4</span></div>
+      <div class="nav-item active" onclick="navTo('dashboard')"><span class="nav-icon">📊</span>Dashboard</div>
+      <div class="nav-item" onclick="navTo('analitica')"><span class="nav-icon">📈</span>Analítica</div>
+      <div class="nav-item" onclick="navTo('alertas')"><span class="nav-icon">🔔</span>Alertas<span class="nav-badge">4</span></div>
       <div class="nav-section-title">Gestión</div>
-      <div class="nav-item"><span class="nav-icon">👥</span>Clientes</div>
-      <div class="nav-item"><span class="nav-icon">📋</span>Proyectos<span class="nav-badge">3</span></div>
+      <div class="nav-item" onclick="navTo('clientes')"><span class="nav-icon">👥</span>Clientes</div>
+      <div class="nav-item" onclick="navTo('proyectos')"><span class="nav-icon">📋</span>Proyectos<span class="nav-badge">3</span></div>
+      <div class="nav-item" onclick="navTo('configuracion')"><span class="nav-icon">⚙️</span>Configuración</div>
       <div class="nav-item" onclick="openThemeModal()"><span class="nav-icon">🎨</span>Apariencia</div>
       <div class="sidebar-apps-title">Mis apps</div>
       <a class="app-link" href="https://voccelstudio.github.io/nemuha/" target="_blank">
@@ -401,7 +410,7 @@ a{text-decoration:none;color:inherit;}
         </div>
       </header>
 
-      <div class="content">
+      <div class="content" id="main-dashboard">
         <div class="greeting animate-in">
           <div>
             <h1>Buen día, <span id="greeting-name">—</span> 👋</h1>
@@ -509,6 +518,204 @@ a{text-decoration:none;color:inherit;}
   </div>
 </div>
 
+<!-- ── SECCIÓN ANALÍTICA ── -->
+<div id="sec-analitica" class="sec-page" style="display:none">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div><h1>Analítica</h1><div class="breadcrumb">Métricas del ecosistema</div></div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill"><span class="pulse-dot"></span>Demo</div>
+    </div>
+  </header>
+  <div class="content">
+    <div class="stats" style="margin-bottom:1.75rem">
+      <div class="stat-card success animate-in">
+        <div class="stat-header"><span class="stat-icon">💰</span><span class="stat-trend trend-up">+23%</span></div>
+        <div class="stat-value">₲ 28M</div>
+        <div class="stat-label">Ingresos este mes</div>
+      </div>
+      <div class="stat-card animate-in" style="animation-delay:.05s">
+        <div class="stat-header"><span class="stat-icon">📁</span><span class="stat-trend trend-up">+5</span></div>
+        <div class="stat-value">18</div>
+        <div class="stat-label">Proyectos activos</div>
+      </div>
+      <div class="stat-card warning animate-in" style="animation-delay:.1s">
+        <div class="stat-header"><span class="stat-icon">👥</span><span class="stat-trend trend-up">+3</span></div>
+        <div class="stat-value">24</div>
+        <div class="stat-label">Clientes totales</div>
+      </div>
+      <div class="stat-card animate-in" style="animation-delay:.15s">
+        <div class="stat-header"><span class="stat-icon">✅</span><span class="stat-trend trend-up">87%</span></div>
+        <div class="stat-value">87%</div>
+        <div class="stat-label">Tareas completadas</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:1.5rem">
+      <div class="card animate-in">
+        <div class="card-header"><div><div class="card-title">📊 Ventas mensuales</div><div class="card-sub">Últimos 6 meses · Ñemuha</div></div></div>
+        <div class="card-body">
+          <div style="display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:1rem" id="an-chart-ventas"></div>
+        </div>
+      </div>
+      <div class="card animate-in" style="animation-delay:.08s">
+        <div class="card-header"><div><div class="card-title">📋 Estado de proyectos</div><div class="card-sub">Freelow · distribución actual</div></div></div>
+        <div class="card-body">
+          <div id="an-estados"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card animate-in" style="animation-delay:.1s">
+        <div class="card-header"><div><div class="card-title">🏆 Top clientes</div><div class="card-sub">Por volumen de ventas</div></div></div>
+        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem" id="an-top-clientes"></div>
+      </div>
+      <div class="card animate-in" style="animation-delay:.15s">
+        <div class="card-header"><div><div class="card-title">📦 Productos más vendidos</div><div class="card-sub">Ñemuha · último mes</div></div></div>
+        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem" id="an-top-productos"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECCIÓN ALERTAS ── -->
+<div id="sec-alertas" class="sec-page" style="display:none">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div><h1>Alertas</h1><div class="breadcrumb">4 sin leer</div></div>
+    </div>
+    <div class="topbar-right">
+      <button class="theme-toggle" onclick="marcarTodasLeidas()">✓ Marcar todas</button>
+    </div>
+  </header>
+  <div class="content">
+    <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap" id="alert-chips"></div>
+    <div style="display:flex;flex-direction:column;gap:10px" id="alertas-list"></div>
+  </div>
+</div>
+
+<!-- ── SECCIÓN CLIENTES ── -->
+<div id="sec-clientes" class="sec-page" style="display:none">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div><h1>Clientes</h1><div class="breadcrumb" id="cli-sub">24 clientes registrados</div></div>
+    </div>
+    <div class="topbar-right">
+      <input id="cli-search" class="topbar-search" placeholder="Buscar cliente..." oninput="filtrarClientes(this.value)" />
+      <button class="theme-toggle" onclick="abrirNuevoCliente()">+ Nuevo cliente</button>
+    </div>
+  </header>
+  <div class="content">
+    <div class="stats" style="margin-bottom:1.5rem">
+      <div class="stat-card success"><div class="stat-header"><span class="stat-icon">👥</span></div><div class="stat-value">24</div><div class="stat-label">Clientes totales</div></div>
+      <div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span></div><div class="stat-value">18</div><div class="stat-label">Con proyectos activos</div></div>
+      <div class="stat-card warning"><div class="stat-header"><span class="stat-icon">💰</span></div><div class="stat-value">₲ 8.4M</div><div class="stat-label">Crédito total otorgado</div></div>
+      <div class="stat-card"><div class="stat-header"><span class="stat-icon">🌍</span></div><div class="stat-value">4</div><div class="stat-label">Países</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px" id="clientes-grid"></div>
+  </div>
+</div>
+
+<!-- ── SECCIÓN PROYECTOS ── -->
+<div id="sec-proyectos" class="sec-page" style="display:none">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div><h1>Proyectos</h1><div class="breadcrumb">Freelow · vista unificada</div></div>
+    </div>
+    <div class="topbar-right">
+      <div style="display:flex;gap:6px" id="proy-filtros"></div>
+      <a class="theme-toggle" href="https://voccelstudio.github.io/freelow/" target="_blank">Abrir Freelow ↗</a>
+    </div>
+  </header>
+  <div class="content">
+    <div class="stats" style="margin-bottom:1.5rem">
+      <div class="stat-card danger"><div class="stat-header"><span class="stat-icon">🔴</span></div><div class="stat-value">3</div><div class="stat-label">Críticos / urgentes</div></div>
+      <div class="stat-card animate-in"><div class="stat-header"><span class="stat-icon">📁</span></div><div class="stat-value">18</div><div class="stat-label">Activos</div></div>
+      <div class="stat-card success"><div class="stat-header"><span class="stat-icon">📦</span></div><div class="stat-value">47</div><div class="stat-label">Entregados</div></div>
+      <div class="stat-card warning"><div class="stat-header"><span class="stat-icon">💸</span></div><div class="stat-value">₲ 3.2M</div><div class="stat-label">Cobros pendientes</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px" id="proyectos-list"></div>
+  </div>
+</div>
+
+<!-- ── SECCIÓN CONFIGURACIÓN ── -->
+<div id="sec-configuracion" class="sec-page" style="display:none">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div><h1>Configuración</h1><div class="breadcrumb">Perfil y preferencias</div></div>
+    </div>
+  </header>
+  <div class="content" style="max-width:640px">
+
+    <div class="card animate-in" style="margin-bottom:1.25rem">
+      <div class="card-header"><div class="card-title">👤 Perfil</div></div>
+      <div class="card-body">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:white" id="cfg-avatar">?</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem" id="cfg-email-display">—</div>
+            <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">Plan Pro · activo</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Nombre</label>
+            <input id="cfg-nombre" style="width:100%;padding:9px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-body);color:var(--text-primary);font-size:13px;font-family:inherit;outline:none" placeholder="Tu nombre" />
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Empresa</label>
+            <input id="cfg-empresa" style="width:100%;padding:9px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-body);color:var(--text-primary);font-size:13px;font-family:inherit;outline:none" placeholder="Nombre de tu empresa" />
+          </div>
+        </div>
+        <button onclick="guardarPerfil()" style="margin-top:16px;padding:9px 20px;background:var(--primary-gradient);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Guardar cambios</button>
+      </div>
+    </div>
+
+    <div class="card animate-in" style="margin-bottom:1.25rem;animation-delay:.05s">
+      <div class="card-header"><div class="card-title">🎨 Tema visual</div></div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Los mismos temas de Ñemuha — sincronizados en todo el ecosistema.</p>
+        <button onclick="openThemeModal()" style="padding:9px 20px;background:var(--bg-body);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">🎨 Cambiar tema</button>
+      </div>
+    </div>
+
+    <div class="card animate-in" style="margin-bottom:1.25rem;animation-delay:.1s">
+      <div class="card-header"><div class="card-title">🔗 Mis apps conectadas</div></div>
+      <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.875rem 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:1.4rem">📦</span>
+            <div><div style="font-weight:600;font-size:.9rem">Ñemuha</div><div style="font-size:.75rem;color:var(--text-muted)">ERP · voccelstudio.github.io/nemuha</div></div>
+          </div>
+          <span style="padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;background:rgba(16,185,129,.12);color:var(--success)">Conectado</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:.875rem 0">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:1.4rem">📋</span>
+            <div><div style="font-weight:600;font-size:.9rem">Freelow</div><div style="font-size:.75rem;color:var(--text-muted)">Project Manager · voccelstudio.github.io/freelow</div></div>
+          </div>
+          <span style="padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;background:rgba(16,185,129,.12);color:var(--success)">Conectado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card animate-in" style="border-color:var(--danger);animation-delay:.15s">
+      <div class="card-header"><div class="card-title" style="color:var(--danger)">⚠️ Zona de peligro</div></div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Cerrar sesión te desconecta de todas las apps del ecosistema.</p>
+        <button onclick="doLogout()" style="padding:9px 20px;background:rgba(239,68,68,.1);color:var(--danger);border:1px solid var(--danger);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- THEME MODAL -->
 <div class="theme-modal-overlay" id="theme-modal-overlay" onclick="if(event.target===this)closeThemeModal()">
   <div class="theme-modal">
@@ -524,7 +731,286 @@ a{text-decoration:none;color:inherit;}
 </div>
 
 <script>
-// ── Supabase ─────────────────────────────────────────────
+// ── Navegación ───────────────────────────────────────────
+function navTo(sec) {
+  // Ocultar todas las secciones
+  document.getElementById('main-dashboard').style.display = 'none'
+  document.querySelectorAll('.sec-page').forEach(el => el.style.display = 'none')
+  // Actualizar nav activo
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'))
+  event?.currentTarget?.classList.add('active')
+  closeSidebar()
+  // Mostrar sección
+  if (sec === 'dashboard') {
+    document.getElementById('main-dashboard').style.display = 'block'
+  } else {
+    const el = document.getElementById('sec-' + sec)
+    if (el) {
+      el.style.display = 'block'
+      renderSection(sec)
+    }
+  }
+}
+
+function renderSection(sec) {
+  if (sec === 'analitica')     renderAnalitica()
+  if (sec === 'alertas')       renderAlertas()
+  if (sec === 'clientes')      renderClientes()
+  if (sec === 'proyectos')     renderProyectos()
+  if (sec === 'configuracion') renderConfiguracion()
+}
+
+// ── Datos demo ───────────────────────────────────────────
+const CLIENTES_DEMO = [
+  {id:'c1', nombre:'Distribuidora Central S.A.', empresa:'Dist. Central', pais:'Paraguay', activos:4, total:12, monto:'₲ 2.1M'},
+  {id:'c2', nombre:'Supermercado Norte', empresa:'Norte Corp', pais:'Paraguay', activos:3, total:8, monto:'₲ 1.8M'},
+  {id:'c3', nombre:'Restaurante Mitã', empresa:'Mitã Group', pais:'Paraguay', activos:2, total:5, monto:'₲ 890K'},
+  {id:'c4', nombre:'Comercial Burgos', empresa:'Burgos e Hijos', pais:'Argentina', activos:1, total:3, monto:'₲ 560K'},
+  {id:'c5', nombre:'López & Asociados', empresa:'L&A Consulting', pais:'Paraguay', activos:3, total:9, monto:'₲ 1.4M'},
+  {id:'c6', nombre:'Farmacia San Juan', empresa:'Farma SJ', pais:'Paraguay', activos:2, total:6, monto:'₲ 720K'},
+  {id:'c7', nombre:'Constructora Ita', empresa:'Ita Build', pais:'Paraguay', activos:1, total:4, monto:'₲ 980K'},
+  {id:'c8', nombre:'Tech Solutions PY', empresa:'TechSol', pais:'Paraguay', activos:2, total:7, monto:'₲ 1.1M'},
+]
+
+const PROYECTOS_DEMO = [
+  {id:'p1', nombre:'Identidad visual Café Báltico', cliente:'Ana Moreno', tipo:'Diseño gráfico', estado:'critico', progreso:75, entrega:'Hoy'},
+  {id:'p2', nombre:'Rediseño web Estudio Forma', cliente:'Diego Ruiz', tipo:'Desarrollo web', estado:'urgente', progreso:50, entrega:'en 5 días'},
+  {id:'p3', nombre:'App móvil MVP Fintrack', cliente:'Sofía Castro', tipo:'Desarrollo web', estado:'atencion', progreso:30, entrega:'en 16 días'},
+  {id:'p4', nombre:'Campaña fotos Ropa Libre', cliente:'Val. Ramos', tipo:'Fotografía', estado:'ok', progreso:15, entrega:'en 29 días'},
+  {id:'p5', nombre:'Planos vivienda Familia Ortiz', cliente:'Familia Ortiz', tipo:'Arquitectura', estado:'ok', progreso:8, entrega:'en 42 días'},
+  {id:'p6', nombre:'Branding Farmacia San Juan', cliente:'Farmacia San Juan', tipo:'Diseño gráfico', estado:'ok', progreso:60, entrega:'en 12 días'},
+]
+
+const ALERTAS_DEMO = [
+  {id:'a1', tipo:'proy', prio:'alta', icon:'⚠️', titulo:'"Identidad visual" venció hace 1d', desc:'Entrega: hoy. Marcá como entregado o actualizá la fecha.', tiempo:'12m', leida:false},
+  {id:'a2', tipo:'pagos', prio:'alta', icon:'💸', titulo:'Factura #0042 vence hoy', desc:'Cliente: Dist. Central · ₲ 850.000', tiempo:'1h', leida:false},
+  {id:'a3', tipo:'proy', prio:'media', icon:'🔴', titulo:'Entrega crítica: "Rediseño web"', desc:'Vence en 5 días. Progreso: 50%.', tiempo:'2h', leida:false},
+  {id:'a4', tipo:'tareas', prio:'media', icon:'✅', titulo:'3 tareas vencidas en Freelow', desc:'Revisá tus proyectos para actualizarlas.', tiempo:'ayer', leida:false},
+  {id:'a5', tipo:'pagos', prio:'baja', icon:'💰', titulo:'Cobro en 3d: Anticipo App MVP', desc:'Vence el 29 de marzo.', tiempo:'ayer', leida:true},
+  {id:'a6', tipo:'proy', prio:'baja', icon:'📅', titulo:'"App móvil MVP" entrega en 16d', desc:'Entrega: 11 de abril.', tiempo:'hace 2d', leida:true},
+]
+
+let alertasFiltro = 'todas'
+let clientesFiltro = ''
+
+// ── Analítica ────────────────────────────────────────────
+function renderAnalitica() {
+  // Chart ventas mensuales
+  const meses = ['Oct','Nov','Dic','Ene','Feb','Mar']
+  const vals  = [18.2, 21.5, 19.8, 24.1, 22.3, 28.4]
+  const max   = Math.max(...vals)
+  const el    = document.getElementById('an-chart-ventas')
+  if (el) el.innerHTML = vals.map((v,i) => {
+    const h = Math.round((v/max)*110)
+    const isLast = i === vals.length-1
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:flex-end;height:100%">
+      <div style="font-size:9px;color:var(--text-muted)">₲${v}M</div>
+      <div style="width:100%;height:${h}px;background:${isLast?'var(--primary-gradient)':'var(--bg-hover)'};border-radius:4px 4px 0 0;border:${isLast?'none':'1px solid var(--border)'}"></div>
+      <div style="font-size:10px;color:${isLast?'var(--primary)':'var(--text-muted)'};font-weight:${isLast?700:400}">${meses[i]}</div>
+    </div>`
+  }).join('')
+
+  // Estados proyectos
+  const estados = [
+    {lbl:'A tiempo', pct:55, color:'var(--success)'},
+    {lbl:'Atención', pct:22, color:'var(--warning)'},
+    {lbl:'Urgente',  pct:13, color:'#f97316'},
+    {lbl:'Crítico',  pct:10, color:'var(--danger)'},
+  ]
+  const est = document.getElementById('an-estados')
+  if (est) est.innerHTML = estados.map(e => `
+    <div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+        <span style="font-weight:500">${e.lbl}</span>
+        <span style="color:var(--text-muted)">${e.pct}%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${e.pct}%;background:${e.color}"></div></div>
+    </div>`).join('')
+
+  // Top clientes
+  const topCli = [
+    {nombre:'Dist. Central S.A.', monto:'₲ 2.1M', pct:100},
+    {nombre:'Supermercado Norte', monto:'₲ 1.8M', pct:86},
+    {nombre:'López & Asociados', monto:'₲ 1.4M', pct:67},
+    {nombre:'Tech Solutions PY', monto:'₲ 1.1M', pct:52},
+    {nombre:'Constructora Ita', monto:'₲ 980K', pct:47},
+  ]
+  const tc = document.getElementById('an-top-clientes')
+  if (tc) tc.innerHTML = topCli.map((c,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:.7rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:22px;font-size:12px;font-weight:700;color:var(--text-muted);text-align:right">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">${c.nombre}</div>
+        <div class="prog-bar" style="margin-top:4px"><div class="prog-fill" style="width:${c.pct}%;background:var(--primary)"></div></div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--success)">${c.monto}</div>
+    </div>`).join('')
+
+  // Top productos
+  const topProd = [
+    {nombre:'Arroz 5kg', ventas:142, monto:'₲ 850K'},
+    {nombre:'Aceite litro', ventas:98, monto:'₲ 490K'},
+    {nombre:'Fideos 500g', ventas:87, monto:'₲ 261K'},
+    {nombre:'Yerba 1kg', ventas:76, monto:'₲ 380K'},
+    {nombre:'Azúcar 1kg', ventas:65, monto:'₲ 195K'},
+  ]
+  const tp = document.getElementById('an-top-productos')
+  if (tp) tp.innerHTML = topProd.map((p,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:.7rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:22px;font-size:12px;font-weight:700;color:var(--text-muted);text-align:right">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">${p.nombre}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${p.ventas} unidades</div>
+      </div>
+      <div style="font-size:13px;font-weight:700">${p.monto}</div>
+    </div>`).join('')
+}
+
+// ── Alertas ──────────────────────────────────────────────
+function renderAlertas() {
+  const chips = document.getElementById('alert-chips')
+  const tipos = [{id:'todas',lbl:'Todas'},{id:'proy',lbl:'Proyectos'},{id:'pagos',lbl:'Pagos'},{id:'tareas',lbl:'Tareas'}]
+  if (chips) chips.innerHTML = tipos.map(t =>
+    `<button class="chip-btn ${alertasFiltro===t.id?'on':''}" onclick="setAlertaFiltro('${t.id}')">${t.lbl}</button>`
+  ).join('')
+
+  const lista = document.getElementById('alertas-list')
+  if (!lista) return
+  const visible = ALERTAS_DEMO.filter(a => alertasFiltro === 'todas' || a.tipo === alertasFiltro)
+  if (!visible.length) { lista.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-muted)">🎉 Todo al día</div>'; return }
+  lista.innerHTML = visible.map(a => `
+    <div class="card" style="padding:14px 16px;border-left:4px solid ${a.prio==='alta'?'var(--danger)':a.prio==='media'?'var(--warning)':'var(--success)'};opacity:${a.leida?.6:1}">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem;flex-shrink:0">${a.icon}</span>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:13px;margin-bottom:3px">${a.titulo}</div>
+          <div style="font-size:12px;color:var(--text-secondary)">${a.desc}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+          <span style="font-size:11px;color:var(--text-muted)">${a.tiempo}</span>
+          ${!a.leida?`<button onclick="marcarLeida('${a.id}')" style="background:var(--bg-hover);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:var(--text-secondary);font-family:inherit">✓ Leída</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')
+}
+
+function setAlertaFiltro(f) { alertasFiltro = f; renderAlertas() }
+function marcarLeida(id) { const a = ALERTAS_DEMO.find(x=>x.id===id); if(a) a.leida=true; renderAlertas() }
+function marcarTodasLeidas() { ALERTAS_DEMO.forEach(a=>a.leida=true); renderAlertas() }
+
+// ── Clientes ─────────────────────────────────────────────
+const AVATAR_COLORS = [
+  ['#EEEDFE','#3C3489'],['#E1F5EE','#0F6E56'],['#FAEEDA','#854F0B'],
+  ['#FCEAEA','#8B1A1A'],['#E6F1FB','#0C447C'],['#EAF3DE','#3B6D11'],
+]
+function renderClientes(q='') {
+  const grid = document.getElementById('clientes-grid')
+  if (!grid) return
+  const lista = CLIENTES_DEMO.filter(c =>
+    !q || c.nombre.toLowerCase().includes(q.toLowerCase()) || c.empresa.toLowerCase().includes(q.toLowerCase())
+  )
+  document.getElementById('cli-sub').textContent = `${lista.length} clientes registrados`
+  grid.innerHTML = lista.map((c,i) => {
+    const [bg,fg] = AVATAR_COLORS[i % AVATAR_COLORS.length]
+    const ini = c.nombre.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase()
+    return `<div class="card" style="padding:16px;cursor:pointer;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.1)'" onmouseleave="this.style.boxShadow='var(--shadow)'">
+      <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:${bg};color:${fg};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${ini}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nombre}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:1px">${c.empresa}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:1px">${c.pais}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border)">
+        <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--primary)">${c.activos}</div><div style="font-size:10px;color:var(--text-muted)">Activos</div></div>
+        <div style="text-align:center"><div style="font-size:18px;font-weight:700">${c.total}</div><div style="font-size:10px;color:var(--text-muted)">Total</div></div>
+        <div style="text-align:center"><div style="font-size:13px;font-weight:700;color:var(--success)">${c.monto}</div><div style="font-size:10px;color:var(--text-muted)">Facturado</div></div>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function filtrarClientes(q) { renderClientes(q) }
+function abrirNuevoCliente() { alert('Próximamente — gestión de clientes desde Ñepu') }
+
+// ── Proyectos ────────────────────────────────────────────
+const ESTADO_CFG = {
+  critico:  {lbl:'Crítico',  color:'var(--danger)'},
+  urgente:  {lbl:'Urgente',  color:'#f97316'},
+  atencion: {lbl:'Atención', color:'var(--warning)'},
+  ok:       {lbl:'A tiempo', color:'var(--success)'},
+}
+let proyFiltro = 'all'
+
+function renderProyectos() {
+  const chips = document.getElementById('proy-filtros')
+  const filtros = [{id:'all',lbl:'Todos'},{id:'critico',lbl:'🔴 Críticos'},{id:'urgente',lbl:'🟡 Urgentes'},{id:'ok',lbl:'✅ A tiempo'}]
+  if (chips) chips.innerHTML = filtros.map(f =>
+    `<button class="chip-btn ${proyFiltro===f.id?'on':''}" onclick="setProyFiltro('${f.id}')">${f.lbl}</button>`
+  ).join('')
+
+  const lista = document.getElementById('proyectos-list')
+  if (!lista) return
+  const visible = PROYECTOS_DEMO.filter(p => proyFiltro==='all' || p.estado===proyFiltro)
+  lista.innerHTML = visible.map(p => {
+    const est = ESTADO_CFG[p.estado] || ESTADO_CFG.ok
+    return `<div class="card" style="padding:14px 16px;cursor:pointer;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.1)'" onmouseleave="this.style.boxShadow='var(--shadow)'">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:10px;height:10px;border-radius:50%;background:${est.color};flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.nombre}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">${p.cliente} · ${p.tipo}</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:${p.progreso}%;background:${est.color}"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text-muted)">
+            <span>${p.progreso}%</span><span>${p.entrega}</span>
+          </div>
+        </div>
+        <span style="padding:.25rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;background:${est.color}22;color:${est.color};flex-shrink:0">${est.lbl}</span>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function setProyFiltro(f) { proyFiltro = f; renderProyectos() }
+
+// ── Configuración ────────────────────────────────────────
+function renderConfiguracion() {
+  const user = supa.auth.getUser ? null : null
+  supa.auth.getSession().then(({data:{session}}) => {
+    if (!session) return
+    const email = session.user.email || ''
+    const ini = email.slice(0,2).toUpperCase()
+    const cfgAvatar = document.getElementById('cfg-avatar')
+    const cfgEmail  = document.getElementById('cfg-email-display')
+    if (cfgAvatar) cfgAvatar.textContent = ini
+    if (cfgEmail)  cfgEmail.textContent  = email
+    const nombre = localStorage.getItem('nepu_nombre') || ''
+    const empresa= localStorage.getItem('nepu_empresa') || ''
+    const n = document.getElementById('cfg-nombre')
+    const e = document.getElementById('cfg-empresa')
+    if (n) n.value = nombre
+    if (e) e.value = empresa
+  })
+}
+
+function guardarPerfil() {
+  const nombre  = document.getElementById('cfg-nombre')?.value  || ''
+  const empresa = document.getElementById('cfg-empresa')?.value || ''
+  localStorage.setItem('nepu_nombre', nombre)
+  localStorage.setItem('nepu_empresa', empresa)
+  // Actualizar greeting si está visible
+  const gn = document.getElementById('greeting-name')
+  if (gn && nombre) gn.textContent = nombre
+  alert('✓ Cambios guardados')
+}
+
+// ── Agregar id al dashboard content para poder ocultarlo ─
+document.addEventListener('DOMContentLoaded', () => {
+  const mainContent = document.querySelector('.main > header + div.content, .main .content')
+  // ya tiene id en el HTML
+})
+
 const SUPA_URL = 'https://mrpuriuqvnqeesfliisc.supabase.co'
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ycHVyaXVxdm5xZWVzZmxpaXNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDk0MDMsImV4cCI6MjA5MDEyNTQwM30.ieWQ_HFpRBKtVWkBuRekYXHKmRjdexuW-tMtEN_51kU'
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY)
