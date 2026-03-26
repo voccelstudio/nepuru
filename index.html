@@ -289,6 +289,8 @@ a{text-decoration:none;color:inherit;}
 .theme-preview-bar{border-radius:2px;height:7px;}
 .theme-label{padding:.3rem .4rem;font-size:.68rem;font-weight:600;text-align:center;border-top:1px solid var(--border);}
 
+.sec-page{display:none;flex-direction:column;min-height:100vh;}
+.sec-page .content{flex:1;}
 .topbar-search{padding:.45rem .875rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-body);color:var(--text-primary);font-size:.8rem;font-family:inherit;outline:none;width:200px;transition:border-color .15s;}
 .topbar-search:focus{border-color:var(--primary);}
 .prog-bar{height:6px;background:var(--border);border-radius:10px;overflow:hidden;margin-top:6px;}
@@ -513,13 +515,10 @@ a{text-decoration:none;color:inherit;}
             </div>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
-</div>
+      </div><!-- /main-dashboard -->
 
-<!-- ── SECCIÓN ANALÍTICA ── -->
-<div id="sec-analitica" class="sec-page" style="display:none">
+    <!-- ── SECCIÓN ANALÍTICA ── -->
+      <div id="sec-analitica" class="sec-page" style="display:none">
   <header class="topbar">
     <div style="display:flex;align-items:center;gap:1rem;">
       <button class="menu-btn" onclick="openSidebar()">☰</button>
@@ -716,6 +715,10 @@ a{text-decoration:none;color:inherit;}
   </div>
 </div>
 
+    </main>
+  </div>
+</div>
+
 <!-- THEME MODAL -->
 <div class="theme-modal-overlay" id="theme-modal-overlay" onclick="if(event.target===this)closeThemeModal()">
   <div class="theme-modal">
@@ -733,22 +736,18 @@ a{text-decoration:none;color:inherit;}
 <script>
 // ── Navegación ───────────────────────────────────────────
 function navTo(sec) {
-  // Ocultar todas las secciones
   document.getElementById('main-dashboard').style.display = 'none'
   document.querySelectorAll('.sec-page').forEach(el => el.style.display = 'none')
-  // Actualizar nav activo
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'))
-  event?.currentTarget?.classList.add('active')
+  const clicked = document.querySelector(`.nav-item[onclick="navTo('${sec}')"]`)
+  if (clicked) clicked.classList.add('active')
   closeSidebar()
-  // Mostrar sección
   if (sec === 'dashboard') {
     document.getElementById('main-dashboard').style.display = 'block'
+    document.querySelector(`.nav-item[onclick="navTo('dashboard')"]`)?.classList.add('active')
   } else {
     const el = document.getElementById('sec-' + sec)
-    if (el) {
-      el.style.display = 'block'
-      renderSection(sec)
-    }
+    if (el) { el.style.display = 'flex'; el.style.flexDirection = 'column'; el.style.minHeight = '100vh'; renderSection(sec) }
   }
 }
 
