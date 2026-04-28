@@ -10,7 +10,7 @@
 <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Ñepyrũ&quot;,&quot;short_name&quot;:&quot;Ñepyrũ&quot;,&quot;start_url&quot;:&quot;./&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0f172a&quot;,&quot;theme_color&quot;:&quot;#6366f1&quot;}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- supabase auth desactivado temporalmente -->
 <style>
 :root {
   --primary:#6366f1;--primary-light:#818cf8;--primary-dark:#4f46e5;
@@ -975,22 +975,18 @@ function setProyFiltro(f) { proyFiltro = f; renderProyectos() }
 
 // ── Configuración ────────────────────────────────────────
 function renderConfiguracion() {
-  const user = supa.auth.getUser ? null : null
-  supa.auth.getSession().then(({data:{session}}) => {
-    if (!session) return
-    const email = session.user.email || ''
-    const ini = email.slice(0,2).toUpperCase()
-    const cfgAvatar = document.getElementById('cfg-avatar')
-    const cfgEmail  = document.getElementById('cfg-email-display')
-    if (cfgAvatar) cfgAvatar.textContent = ini
-    if (cfgEmail)  cfgEmail.textContent  = email
-    const nombre = localStorage.getItem('nepuru_nombre') || ''
-    const empresa= localStorage.getItem('nepuru_empresa') || ''
-    const n = document.getElementById('cfg-nombre')
-    const e = document.getElementById('cfg-empresa')
-    if (n) n.value = nombre
-    if (e) e.value = empresa
-  })
+  const email = localStorage.getItem('nepuru_nombre') ? localStorage.getItem('nepuru_nombre') + '@nepuru.app' : 'usuario@nepuru.app'
+  const ini = email.slice(0,2).toUpperCase()
+  const cfgAvatar = document.getElementById('cfg-avatar')
+  const cfgEmail  = document.getElementById('cfg-email-display')
+  if (cfgAvatar) cfgAvatar.textContent = ini
+  if (cfgEmail)  cfgEmail.textContent  = email
+  const nombre  = localStorage.getItem('nepuru_nombre') || ''
+  const empresa = localStorage.getItem('nepuru_empresa') || ''
+  const n = document.getElementById('cfg-nombre')
+  const e = document.getElementById('cfg-empresa')
+  if (n) n.value = nombre
+  if (e) e.value = empresa
 }
 
 function guardarPerfil() {
@@ -1004,100 +1000,34 @@ function guardarPerfil() {
   alert('✓ Cambios guardados')
 }
 
-// ── Agregar id al dashboard content para poder ocultarlo ─
-document.addEventListener('DOMContentLoaded', () => {
-  const mainContent = document.querySelector('.main > header + div.content, .main .content')
-  // ya tiene id en el HTML
-})
+// ── init ─
 
-const SUPA_URL = 'https://mrpuriuqvnqeesfliisc.supabase.co'
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ycHVyaXVxdm5xZWVzZmxpaXNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDk0MDMsImV4cCI6MjA5MDEyNTQwM30.ieWQ_HFpRBKtVWkBuRekYXHKmRjdexuW-tMtEN_51kU'
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY)
-
-// ── Auth ─────────────────────────────────────────────────
-supa.auth.onAuthStateChange((event, session) => {
-  if (session) showApp(session.user)
-  else showLogin()
-})
-
-async function doLogin() {
-  const email = document.getElementById('login-email').value.trim()
-  const pass  = document.getElementById('login-pass').value
-  if (!email || !pass) return showErr('Completá email y contraseña')
-  const btn = document.getElementById('login-btn')
-  btn.disabled = true; btn.textContent = 'Ingresando...'
-  const { error } = await supa.auth.signInWithPassword({ email, password: pass })
-  btn.disabled = false; btn.textContent = 'Ingresar →'
-  if (error) showErr(traducirError(error.message))
-}
-
-async function doRegister() {
-  const email = document.getElementById('reg-email').value.trim()
-  const pass  = document.getElementById('reg-pass').value
-  const pass2 = document.getElementById('reg-pass2').value
-  if (!email || !pass) return showErr('Completá todos los campos')
-  if (pass !== pass2)  return showErr('Las contraseñas no coinciden')
-  if (pass.length < 6) return showErr('La contraseña debe tener al menos 6 caracteres')
-  const btn = document.getElementById('reg-btn')
-  btn.disabled = true; btn.textContent = 'Creando cuenta...'
-  const { error } = await supa.auth.signUp({ email, password: pass })
-  btn.disabled = false; btn.textContent = 'Crear cuenta →'
-  if (error) showErr(traducirError(error.message))
-  else showErr('✓ Revisá tu email para confirmar la cuenta', true)
-}
-
-async function doLogout() {
-  await supa.auth.signOut()
-}
+// ── Auth DESACTIVADO — acceso directo ────────────────────
+function doLogout() { location.reload() }
+function doLogin() {}
+function doRegister() {}
+function showLogin() {}
+function showRegister() {}
+function showLogin2() {}
+function showErr() {}
+function traducirError(m) { return m }
 
 function showApp(user) {
   document.getElementById('login-screen').style.display = 'none'
   document.getElementById('app-screen').style.display = 'block'
-  const email = user.email || ''
+  const email = (user && user.email) ? user.email : 'usuario'
   const initials = email.slice(0,2).toUpperCase()
   document.getElementById('sb-avatar').textContent = initials
   document.getElementById('sb-email').textContent = email
-  document.getElementById('greeting-name').textContent = email.split('@')[0]
+  const nombre = localStorage.getItem('nepuru_nombre') || email.split('@')[0]
+  document.getElementById('greeting-name').textContent = nombre
   initDashboard()
 }
 
-function showLogin() {
-  document.getElementById('login-screen').style.display = 'flex'
-  document.getElementById('app-screen').style.display = 'none'
-}
-
-function showErr(msg, ok=false) {
-  const el = document.getElementById('login-err')
-  el.textContent = msg
-  el.style.display = 'block'
-  el.style.background = ok ? 'rgba(16,185,129,.1)' : 'rgba(239,68,68,.1)'
-  el.style.borderColor = ok ? 'rgba(16,185,129,.3)' : 'rgba(239,68,68,.3)'
-  el.style.color = ok ? '#6ee7b7' : '#fca5a5'
-}
-
-function showRegister() {
-  document.getElementById('login-form').style.display = 'none'
-  document.getElementById('register-form').style.display = 'block'
-  document.getElementById('login-title').textContent = 'Crear cuenta'
-  document.getElementById('login-sub').textContent = 'Registrate en Ñepyrũ'
-  document.getElementById('login-err').style.display = 'none'
-}
-
-function showLogin2() {
-  document.getElementById('login-form').style.display = 'block'
-  document.getElementById('register-form').style.display = 'none'
-  document.getElementById('login-title').textContent = 'Bienvenido'
-  document.getElementById('login-sub').textContent = 'Ingresá a tu centro de control'
-  document.getElementById('login-err').style.display = 'none'
-}
-function showLogin(){ showLogin2() }
-
-function traducirError(msg) {
-  if (msg.includes('Invalid login'))       return '❌ Email o contraseña incorrectos'
-  if (msg.includes('Email not confirmed')) return '📧 Confirmá tu email antes de ingresar'
-  if (msg.includes('User already registered')) return '⚠️ Ya existe una cuenta con ese email'
-  if (msg.includes('Too many requests'))   return '⏳ Demasiados intentos. Esperá un momento'
-  return '❌ ' + msg
+// Entrar directo al dashboard
+document.addEventListener('DOMContentLoaded', () => {
+  showApp({ email: localStorage.getItem('nepuru_nombre') ? localStorage.getItem('nepuru_nombre') + '@nepuru.app' : 'usuario@nepuru.app' })
+})
 }
 
 // ── Temas (mismos que Ñemuha) ────────────────────────────
